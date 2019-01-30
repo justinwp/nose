@@ -100,6 +100,10 @@ class Coverage(Plugin):
                           default=env.get('NOSE_COVER_NO_PRINT'),
                           dest="cover_no_print",
                           help="Suppress printing of coverage information")
+        parser.add_option("--cover-show-missing", action="store_true",
+                          default=env.get('NOSE_COVER_SHOW_MISSING'),
+                          dest="cover_show_missing",
+                          help="Show missing lines")
 
     def configure(self, options, conf):
         """
@@ -140,6 +144,7 @@ class Coverage(Plugin):
             self.coverHtmlDir = options.cover_html_dir
             log.debug('Will put HTML coverage report in %s', self.coverHtmlDir)
         self.coverBranches = options.cover_branches
+        self.showMissing = options.show_missing
         self.coverXmlFile = None
         if options.cover_min_percentage:
             self.coverMinPercentage = int(options.cover_min_percentage.rstrip('%'))
@@ -222,7 +227,11 @@ class Coverage(Plugin):
         # make sure we have minimum required coverage
         if self.coverMinPercentage:
             f = StringIO.StringIO()
-            self.coverInstance.report(modules, file=f)
+            self.coverInstance.report(
+                modules, 
+                file=f, 
+                show_missing=self.showMissing
+            )
 
             multiPackageRe = (r'-------\s\w+\s+\d+\s+\d+(?:\s+\d+\s+\d+)?'
                               r'\s+(\d+)%\s+\d*\s{0,1}$')
