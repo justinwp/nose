@@ -144,7 +144,7 @@ class Coverage(Plugin):
             self.coverHtmlDir = options.cover_html_dir
             log.debug('Will put HTML coverage report in %s', self.coverHtmlDir)
         self.coverBranches = options.cover_branches
-        self.showMissing = options.show_missing
+        self.showMissing = options.cover_show_missing
         self.coverXmlFile = None
         if options.cover_min_percentage:
             self.coverMinPercentage = int(options.cover_min_percentage.rstrip('%'))
